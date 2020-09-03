@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Final JS test</title>
+</head>
+<body>
+<script>
+	var position = ["Junior QA engineer", "Middle QA engineer", "Porduct owner", "Senior QA engineer", "Middle developer", "Project manager", "Senior developer", "Junior developer"];
+	var employees = [];
+	var team = {};
+	var salaryEstimate = {
+		junior: {from: 500, to: 100},
+		middle: {from: 1500, to: 2000},
+		senior: {from: 2500, to: 3000}
+	};
+
+	// generate random integer
+	function getRandomInt(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	// get names from user
+	function getNames() {
+		for (var i = 0; i < position.length; i++) {
+			employees.push(prompt("Введите имя сотрудника"));
+		}
+	}
+
+	// create team to object
+	function createTeam() {
+		for (var i = 0; i < position.length; i++) {
+			team[i] = {
+				name: employees[i],
+				position: position[i]
+			}
+		}
+	}
+
+	// add salary to each employee
+	function setSalary() {
+		for (var employee in team) {
+			var salaryMin = 4000;
+			var salaryMax = 4500;
+
+			for (var position in salaryEstimate) {
+				if (team[employee].position.toLocaleLowerCase().includes(position)) {
+					salaryMin = salaryEstimate[position].from;
+					salaryMax = salaryEstimate[position].to;
+					break;
+				}
+			}
+
+			team[employee].salary = getRandomInt(salaryMin, salaryMax);
+			team[employee].tellAboutYourSelf = function () {
+				return `Меня зовут ${this.name} и я ${this.position}. Я зарабатываю ${this.salary}$`;
+			};
+			console.log(team[employee].tellAboutYourSelf());
+		}
+	}
+
+	getNames();
+	createTeam();
+	setSalary();
+
+	// return team members
+	team.showTeam = function () {
+		for (employee in this) {
+			if (typeof this[employee] === "function") continue; // skip functions
+			console.log(`${this[employee].name} - ${this[employee].position}. Зарплата - ${this[employee].salary}$.`);
+		}
+	};
+
+	team.showTeam();
+</script>
+</body>
+</html>
